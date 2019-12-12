@@ -344,7 +344,7 @@ void InitStressTermsForElems(struct MeshGPU *meshGPU,
 							 HCC_ID(sigyy)
 							 HCC_ID(sigzz)
 							 HCC_ID(p)
-							 HCC_ID(q)](index<1> idx) restrict(amp){
+							 HCC_ID(q)](Kalmar::index<1> idx) restrict(amp){
     int i = idx[0];
     sigxx[i] = sigyy[i] = sigzz[i] =  - p[i] - q[i] ;
   });
@@ -628,7 +628,7 @@ void IntegrateStressForElems(struct MeshGPU *meshGPU,Index_t numNode,
 					      HCC_ID(fz)
 					      HCC_ID(fx_elem)
 					      HCC_ID(fy_elem)
-					      HCC_ID(fz_elem)](index<1> idx) restrict(amp){
+					      HCC_ID(fz_elem)](Kalmar::index<1> idx) restrict(amp){
     Int_t i=idx[0];
     Int_t count=nodeElemCount[i];
     Real_t fx_local,fy_local,fz_local;
@@ -898,7 +898,7 @@ void CalcFBHourglassForceForElems(struct MeshGPU *meshGPU,
 		       HCC_ID(fx_elem)
                        HCC_ID(fy_elem)
                        HCC_ID(fz_elem)]
-		       (index<1> idx) restrict(amp){
+		       (Kalmar::index<1> idx) restrict(amp){
     Int_t i=idx[0];
     Int_t count=nodeElemCount[i];
     Real_t fx_local = (Real_t)(0.0);
@@ -1121,7 +1121,7 @@ void CalcForceForNodes(Domain& mesh, struct MeshGPU *meshGPU)
 		     HCC_ID(fx)
 		     HCC_ID(fy)
 		     HCC_ID(fz)]
-		    (index<1> idx) restrict(amp){
+		    (Kalmar::index<1> idx) restrict(amp){
     Int_t i = idx[0];
     fx[i] = (Real_t)(0.0) ;
     fy[i] = (Real_t)(0.0) ;
@@ -1156,7 +1156,7 @@ void CalcAccelerationForNodes(Domain &mesh, struct MeshGPU *meshGPU,
                                                              HCC_ID(fy)
                                                              HCC_ID(fz)
                                                              HCC_ID(nodalMass)]
-                                            (index<1> idx) restrict(amp){
+                                            (Kalmar::index<1> idx) restrict(amp){
 
     Int_t i=idx[0];
     xdd[i]=fx[i]/nodalMass[i];
@@ -1188,7 +1188,7 @@ void ApplyAccelerationBoundaryConditionsForNodes(Domain& mesh,
                                                                   HCC_ID(symmX)
                                                                   HCC_ID(symmY)
                                                                   HCC_ID(symmZ)]
-                                            (index<1> idx) restrict(amp)
+                                            (Kalmar::index<1> idx) restrict(amp)
     {
       Int_t i=idx[0];
       xdd[symmX[i]] = (Real_t)(0.0) ;
@@ -1221,7 +1221,7 @@ void CalcVelocityForNodes(Domain &mesh, struct MeshGPU *meshGPU,
 								HCC_ID(xdd)
 								HCC_ID(ydd)
 								HCC_ID(zdd)]
-					    (index<1> idx) restrict(amp)
+					    (Kalmar::index<1> idx) restrict(amp)
   {
     Int_t i = idx[0]; 
     Real_t xdtmp, ydtmp, zdtmp ;
@@ -1262,7 +1262,7 @@ void CalcPositionForNodes(Domain &mesh, struct MeshGPU *meshGPU,
                                                                 HCC_ID(xd)
                                                                 HCC_ID(yd)
                                                                 HCC_ID(zd)]
-                                             (index<1> idx) restrict(amp)
+                                             (Kalmar::index<1> idx) restrict(amp)
     {
       Int_t i = idx[0]; 
       x[i] += xd[i] * dt;
@@ -1852,7 +1852,7 @@ void CalcLagrangeElements(Domain& mesh, struct MeshGPU *meshGPU)
 		       HCC_ID(vdov)
 		       HCC_ID(dxx)
 		       HCC_ID(dyy)
-                       HCC_ID(dzz)](index<1> idx) restrict(amp)
+                       HCC_ID(dzz)](Kalmar::index<1> idx) restrict(amp)
         {
 	  int k=idx[0];
 	  Real_t vdovNew = dxx[k] + dyy[k] + dzz[k] ;
@@ -2076,7 +2076,7 @@ void CalcMonotonicQRegionForElems(struct MeshGPU *meshGPU,
 		     HCC_ID(lzetap)
 		     HCC_ID(elemMass)
 		     HCC_ID(qq)
-                     HCC_ID(ql)](index<1> idx) restrict(amp)
+                     HCC_ID(ql)](Kalmar::index<1> idx) restrict(amp)
     {
       int ielem=idx[0];
       Real_t qlin, qquad ;
@@ -2295,7 +2295,7 @@ void CalcPressureForElems(struct MeshGPU *meshGPU,
 		       HCC_ID(pbvc)
 		       HCC_ID(e_old)
 		       HCC_ID(compression)
-		       HCC_ID(vnewc)](index<1> idx) restrict(amp)
+		       HCC_ID(vnewc)](Kalmar::index<1> idx) restrict(amp)
     {
       int i=idx[0];
       bvc[i] = c1s * (compression[i] + (Real_t)(1.));
@@ -2360,7 +2360,7 @@ void CalcEnergyForElems(struct MeshGPU *meshGPU, Index_t regionStart,
 		      HCC_ID(q_old)
 		      HCC_ID(work)
 		      HCC_ID(delvc)
-                      ](index<1> idx) restrict(amp)
+                      ](Kalmar::index<1> idx) restrict(amp)
     {
       int i=idx[0];
       e_new[i] = e_old[i] - (Real_t)(0.5) * delvc[i] * (p_old[i] + q_old[i])
@@ -2389,7 +2389,7 @@ void CalcEnergyForElems(struct MeshGPU *meshGPU, Index_t regionStart,
 		      HCC_ID(delvc)
 		      HCC_ID(qq)
 		      HCC_ID(ql)
-                      HCC_ID(pHalfStep)](index<1> idx) restrict(amp)
+                      HCC_ID(pHalfStep)](Kalmar::index<1> idx) restrict(amp)
    {
     int i=idx[0];
     Real_t vhalf = (Real_t)(1.) / ((Real_t)(1.) + compHalfStep[i]) ;
@@ -2442,7 +2442,7 @@ void CalcEnergyForElems(struct MeshGPU *meshGPU, Index_t regionStart,
 		      HCC_ID(delvc)
 		      HCC_ID(qq)
 		      HCC_ID(ql)
-                      HCC_ID(pHalfStep)](index<1> idx) restrict(amp)
+                      HCC_ID(pHalfStep)](Kalmar::index<1> idx) restrict(amp)
 	{
 
 	  int i=idx[0]; 
@@ -2494,7 +2494,7 @@ void CalcEnergyForElems(struct MeshGPU *meshGPU, Index_t regionStart,
 		       HCC_ID(vnewc)
 		       HCC_ID(delvc)
 		       HCC_ID(qq)
-		       HCC_ID(ql)](index<1> idx) restrict(amp)	      
+		       HCC_ID(ql)](Kalmar::index<1> idx) restrict(amp)	      
 	{
 	  int i=idx[0]; 
 	  if ( delvc[i] <= (Real_t)(0.) ) {
@@ -2543,7 +2543,7 @@ void CalcSoundSpeedForElems(struct MeshGPU *meshGPU,
 		       HCC_ID(pbvc)
 		       HCC_ID(bvc)
 		       HCC_ID(matElemlist)
-		       HCC_ID(ss)](index<1> idx) restrict(amp)
+		       HCC_ID(ss)](Kalmar::index<1> idx) restrict(amp)
     {
       int i=idx[0];
       Index_t iz = matElemlist[regionStart+i];
@@ -2618,7 +2618,7 @@ void EvalEOSForElems(Index_t regionStart, Domain& mesh,
 			 HCC_ID(compression)
 			 HCC_ID(compHalfStep)
 			 HCC_ID(work)
-                         ](index<1> idx) restrict(amp)
+                         ](Kalmar::index<1> idx) restrict(amp)
 	    {
 
 	      int i=idx[0];
@@ -2673,7 +2673,7 @@ void EvalEOSForElems(Index_t regionStart, Domain& mesh,
                              HCC_ID(e_new)
                              HCC_ID(q_new)
                              HCC_ID(matElemlist)]
-		            (index<1> idx) restrict(amp)
+		            (Kalmar::index<1> idx) restrict(amp)
 	{
 	      int i=idx[0];
 	      Index_t zidx = matElemlist[regionStart+i] ;
@@ -2707,7 +2707,7 @@ void ApplyMaterialPropertiesForElems(Domain& mesh, struct MeshGPU *meshGPU)
 		    [=
                      HCC_ID(matElemlist)
                      HCC_ID(vnew)
-                     HCC_ID(vnewc)](index<1> idx) restrict(amp)
+                     HCC_ID(vnewc)](Kalmar::index<1> idx) restrict(amp)
     {
       int i=idx[0];
       Index_t zn = matElemlist[i] ;
@@ -2781,7 +2781,7 @@ void UpdateVolumesForElems(Domain &mesh, struct MeshGPU *meshGPU,
      completion_future fut = parallel_for_each(extent<1>(length),
 		       [=
                         HCC_ID(vnew)
-                        HCC_ID(v)](index<1> idx) restrict(amp)
+                        HCC_ID(v)](Kalmar::index<1> idx) restrict(amp)
      {
        int i=idx[0];
          Real_t tmpV ;
